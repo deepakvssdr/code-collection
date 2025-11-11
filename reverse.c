@@ -4,6 +4,8 @@ int n,rem,a[10],t=-1,i;
 void push(int m);
 void pop();  
 
+
+
 void main()
 {
     printf("Enter size:");
