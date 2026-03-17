@@ -1,3 +1,42 @@
+# ============================================================
+# Media Downloader (MP3 & MP4)
+# ============================================================
+# Description:
+# A Flask-based web app to download audio (MP3) and video (MP4)
+# from multiple platforms using a URL.
+#
+# ------------------------------------------------------------
+# Requirements:
+# Python 3.8 or above (recommended: 3.10+)
+#
+# Install Python libraries:
+# pip install flask yt-dlp
+#
+# Install FFmpeg (MANDATORY for audio/video processing):
+# Windows:
+#   winget install Gyan.FFmpeg
+#
+# Verify FFmpeg installation:
+#   ffmpeg -version
+#
+# ------------------------------------------------------------
+# How to Run:
+# 1. Install dependencies
+# 2. download the code ,and save it in any folder
+# 3. in folder open cmd and type python download.py and press enter
+# 4. Run:
+#   it will show this link http://127.0.0.1:5000
+#   by pressing control just click on it ,you will visit the tool
+#
+# ------------------------------------------------------------
+# Features:
+# - Download audio as MP3
+# - Download video as MP4
+# - Supports multiple platforms (YouTube, Instagram, TikTok, etc.)
+#
+# ------------------------------------------------------------
+
+
 from flask import Flask, request, send_file, render_template_string
 import yt_dlp
 import os
@@ -53,7 +92,7 @@ HTML = '''
         <button class="fmt-btn" id="btn-mp4" onclick="selectFormat('mp4')">🎬 MP4</button>
     </div>
 
-    <button id="download-btn" onclick="startDownload()">🚀 Download</button>
+    <button id="download-btn" onclick="startDownload()"> Download</button>
     <p id="status"></p>
     <p><small>Supports YouTube, TikTok, Instagram, Twitter, Facebook and more</small></p>
 
@@ -72,7 +111,7 @@ HTML = '''
 
             const btn = document.getElementById('download-btn');
             btn.disabled = true;
-            btn.innerText = '⏳ Downloading...';
+            btn.innerText = ' Downloading...';
             document.getElementById('status').innerText = 'Please wait, this may take a moment...';
 
             fetch(`/download?url=${encodeURIComponent(url)}&format=${selectedFormat}`)
@@ -85,14 +124,14 @@ HTML = '''
                     a.href = URL.createObjectURL(blob);
                     a.download = selectedFormat === 'mp3' ? 'audio.mp3' : 'video.mp4';
                     a.click();
-                    document.getElementById('status').innerText = '✅ Download complete!';
+                    document.getElementById('status').innerText = 'Download complete!';
                     btn.disabled = false;
-                    btn.innerText = '🚀 Download';
+                    btn.innerText = 'Download';
                 })
                 .catch(err => {
-                    document.getElementById('status').innerText = '❌ ' + err.message;
+                    document.getElementById('status').innerText = 'x ' + err.message;
                     btn.disabled = false;
-                    btn.innerText = '🚀 Download';
+                    btn.innerText = 'Download';
                 });
         }
     </script>
@@ -109,7 +148,7 @@ def download():
     url = request.args.get('url')
     fmt = request.args.get('format', 'mp3')
     if not url:
-        return "❌ Please paste a URL", 400
+        return " Please paste a URL", 400
 
     try:
         timestamp = int(time.time())
@@ -170,14 +209,14 @@ def download():
     except Exception as e:
         error = str(e).lower()
         if any(word in error for word in ["ffmpeg", "ffprobe"]):
-            return "❌ FFmpeg not installed. Run: winget install Gyan.FFmpeg", 400
+            return " FFmpeg not installed. Run: winget install Gyan.FFmpeg", 400
         if any(word in error for word in ["sign in", "age", "private", "unavailable"]):
-            return "❌ Video is private or age-restricted.", 400
-        return f"❌ Failed: {str(e)[:300]}", 500
+            return " Video is private or age-restricted.", 400
+        return f" Failed: {str(e)[:300]}", 500
 
 
 if __name__ == '__main__':
-    print("🚀 Starting Media Downloader...")
+    print(" Starting Media Downloader...")
     print("→ Open: http://127.0.0.1:5000")
     print("→ Choose MP3 or MP4 then click Download")
     app.run(host='0.0.0.0', port=5000, debug=False)
